@@ -7,42 +7,42 @@
 *                              *
 ********************************
 
-PUSHY    MAC
+PUSHY    .MACRO
          TYA
          PHA
-         EOM
+         .ENDM
 
-POPY     MAC
+POPY     .MACRO
          PLA
          TAY
-         EOM
+         .ENDM
 
-PUSHXY   MAC
+PUSHXY   .MACRO
          TXA
          PHA
          TYA
          PHA
-         EOM
+         .ENDM
 
-POPXY    MAC
+POPXY    .MACRO
          PLA
          TAY
          PLA
          TAX
-         EOM
+         .ENDM
 
 ********************************
 *                              *
-* PUTS MACRO - OUTPUTS STRING  *
+* PUTS .MACRORO - OUTPUTS STRING  *
 * ]1 = ADDRESS OF NULL-        *
 *      TERMINATED STRING       *
 *                              *
 ********************************
 
-PUTS     MAC
+PUTS     .MACRO
          PUSHY
          LDY   #0         ; PREPARE LOOP INDEX
-NEXT     LDA   ]1,Y       ; LOAD A CHARACTER
+NEXT     LDA   \0,Y       ; LOAD A CHARACTER
          CMP   #0         ; CHECK FOR END OF STRING
          BEQ   DONE
          ORA   #%10000000 ; SET HIGH BIT FOR OUTPUT
@@ -50,7 +50,7 @@ NEXT     LDA   ]1,Y       ; LOAD A CHARACTER
          INY
          JMP   NEXT
 DONE     POPY
-         EOM
+         .ENDM
 
 ********************************
 *                              *
@@ -63,9 +63,9 @@ DONE     POPY
 *                              *
 ********************************
 
-PUTF     MAC
+PUTF     .MACRO
          JSR   FOUT       ;CONVERT FAC TO STRING
-         STA   ]1         ;STORE LOW BYTE OF STRING
-         STY   ]1+1       ;STORE HIGH BYTE OF STRING
-         PUTS  (]1)       ;PRINT STRING
-         EOM
+         STA   \0         ;STORE LOW BYTE OF STRING
+         STY   \0+1       ;STORE HIGH BYTE OF STRING
+         PUTS  (\0)       ;PRINT STRING
+         .ENDM

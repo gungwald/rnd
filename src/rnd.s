@@ -3,9 +3,10 @@
 ; Random dungeon generator
 ;
 ;**************************
-	use	symbols
-	use	macros
-	dsk	rnd
+	.include    "symbols.s"
+	.include    "macros.s"
+
+        .code
 
 	org	$8000
 

@@ -1,12 +1,10 @@
-MERLIN_URL=https://www.brutaldeluxe.fr/products/crossdevtools/merlin/Merlin32_v1.0.zip
-
 PGM=rnd
-BASE_DSK=prodos-2.0.3-boot.dsk
+BASE_DSK=../storage/prodos-2.0.3-boot.dsk
 # It is necessary to use this older version of AppleCommander to support
 # the PowerBook G4 and iBook G3. This version only requires Java 1.3.
-AC=java -jar AppleCommander-1.3.5-ac.jar
-AS65=java -cp 65xx.zip uk.co.demon.obelisk.w65xx.As65
-LK65=java -cp 65xx.zip uk.co.demon.obelisk.w65xx.Lk65
+AC=java -jar ../lib/AppleCommander-1.3.5-ac.jar
+AS65=java -cp ../lib/65xx.zip uk.co.demon.obelisk.w65xx.As65
+LK65=java -cp ../lib/65xx.zip uk.co.demon.obelisk.w65xx.Lk65
 SRC=$(PGM).s
 VOL=$(PGM)
 DSK=$(PGM).dsk
@@ -33,8 +31,9 @@ $(DSK): $(PGM)
 $(PGM): $(PGM).obj
 	$(LK65) -output $(PGM) -bin $(PGM).obj
 
+# as65 does not exit with a non-zero code so that make can detect when it failed.
 $(PGM).obj: symbols.s macros.s $(SRC)
-	$(AS65) $(SRC)
+	$(AS65) $(SRC) 2>&1 | tee as65-output.txt && [ ! -s as65-output.txt ]
 
 test: $(DSK)
 	$(EMU) $(DSK)

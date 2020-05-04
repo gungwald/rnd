@@ -1,0 +1,127 @@
+Error: symbols.s (1) No active section
+Error: symbols.s (1) Unknown opcode or directive
+Error: symbols.s (2) No active section
+Error: symbols.s (2) Unknown opcode or directive
+Error: symbols.s (3) No active section
+Error: symbols.s (3) Unknown opcode or directive
+Error: symbols.s (4) No active section
+Error: symbols.s (4) Unknown opcode or directive
+Error: symbols.s (5) No active section
+Error: symbols.s (5) Unknown opcode or directive
+Error: symbols.s (6) No active section
+Error: symbols.s (6) Unknown opcode or directive
+Error: symbols.s (7) No active section
+Error: symbols.s (7) Unknown opcode or directive
+Error: symbols.s (8) No active section
+Error: symbols.s (8) Unknown opcode or directive
+Error: symbols.s (14) No active section
+Error: symbols.s (14) Unknown opcode or directive
+Error: symbols.s (15) No active section
+Error: symbols.s (15) Unknown opcode or directive
+Error: symbols.s (16) No active section
+Error: symbols.s (16) Unknown opcode or directive
+Error: symbols.s (17) No active section
+Error: symbols.s (17) Unknown opcode or directive
+Error: symbols.s (18) No active section
+Error: symbols.s (18) Unknown opcode or directive
+Error: symbols.s (19) No active section
+Error: symbols.s (19) Unknown opcode or directive
+Error: symbols.s (43) No active section
+Error: symbols.s (43) Unknown opcode or directive
+Error: symbols.s (44) No active section
+Error: symbols.s (44) Unknown opcode or directive
+Error: symbols.s (45) No active section
+Error: symbols.s (45) Unknown opcode or directive
+Error: symbols.s (46) No active section
+Error: symbols.s (46) Unknown opcode or directive
+Error: symbols.s (47) No active section
+Error: symbols.s (47) Unknown opcode or directive
+Error: symbols.s (48) No active section
+Error: symbols.s (48) Unknown opcode or directive
+Error: symbols.s (49) No active section
+Error: symbols.s (49) Unknown opcode or directive
+Error: symbols.s (50) No active section
+Error: symbols.s (50) Unknown opcode or directive
+Error: symbols.s (76) No active section
+Error: symbols.s (76) Unknown opcode or directive
+Error: symbols.s (77) No active section
+Error: symbols.s (77) Unknown opcode or directive
+Error: symbols.s (78) No active section
+Error: symbols.s (78) Unknown opcode or directive
+Error: symbols.s (79) No active section
+Error: symbols.s (79) Unknown opcode or directive
+Error: symbols.s (80) No active section
+Error: symbols.s (80) Unknown opcode or directive
+Error: symbols.s (81) No active section
+Error: symbols.s (81) Unknown opcode or directive
+Error: symbols.s (82) No active section
+Error: symbols.s (82) Unknown opcode or directive
+Error: symbols.s (83) No active section
+Error: symbols.s (83) Unknown opcode or directive
+Error: macros.s (1) No active section
+Error: macros.s (1) Unknown opcode or directive
+Error: macros.s (2) No active section
+Error: macros.s (2) Unknown opcode or directive
+Error: macros.s (3) No active section
+Error: macros.s (3) Unknown opcode or directive
+Error: macros.s (4) No active section
+Error: macros.s (4) Unknown opcode or directive
+Error: macros.s (5) No active section
+Error: macros.s (5) Unknown opcode or directive
+Error: macros.s (6) No active section
+Error: macros.s (6) Unknown opcode or directive
+Error: macros.s (7) No active section
+Error: macros.s (7) Unknown opcode or directive
+Error: macros.s (8) No active section
+Error: macros.s (8) Unknown opcode or directive
+Error: macros.s (34) No active section
+Error: macros.s (34) Unknown opcode or directive
+Error: macros.s (35) No active section
+Error: macros.s (35) Unknown opcode or directive
+Error: macros.s (36) No active section
+Error: macros.s (36) Unknown opcode or directive
+Error: macros.s (37) No active section
+Error: macros.s (37) Unknown opcode or directive
+Error: macros.s (38) No active section
+Error: macros.s (38) Unknown opcode or directive
+Error: macros.s (39) No active section
+Error: macros.s (39) Unknown opcode or directive
+Error: macros.s (40) No active section
+Error: macros.s (40) Unknown opcode or directive
+Error: macros.s (55) No active section
+Error: macros.s (55) Unknown opcode or directive
+Error: macros.s (56) No active section
+Error: macros.s (56) Unknown opcode or directive
+Error: macros.s (57) No active section
+Error: macros.s (57) Unknown opcode or directive
+Error: macros.s (58) No active section
+Error: macros.s (58) Unknown opcode or directive
+Error: macros.s (59) No active section
+Error: macros.s (59) Unknown opcode or directive
+Error: macros.s (60) No active section
+Error: macros.s (60) Unknown opcode or directive
+Error: macros.s (61) No active section
+Error: macros.s (61) Unknown opcode or directive
+Error: macros.s (62) No active section
+Error: macros.s (62) Unknown opcode or directive
+Error: macros.s (63) No active section
+Error: macros.s (63) Unknown opcode or directive
+Error: macros.s (64) No active section
+Error: macros.s (64) Unknown opcode or directive
+Error: rnd.s (11) Unknown opcode or directive
+Error: rnd.s (17) Unknown opcode or directive
+Error: rnd.s (27) Label as already been defined: *
+Error: rnd.s (27) Unknown opcode or directive
+Error: rnd.s (37) Label as already been defined: *
+Error: rnd.s (37) Unknown opcode or directive
+Error: rnd.s (44) Label as already been defined: *
+Error: rnd.s (44) Unknown opcode or directive
+Error: rnd.s (50) Label as already been defined: *
+Error: rnd.s (50) Unknown opcode or directive
+Error: rnd.s (60) Label as already been defined: *
+Error: rnd.s (60) Unknown opcode or directive
+Error: rnd.s (61) Label as already been defined: *
+Error: rnd.s (61) Unknown opcode or directive
+Error: rnd.s (64) Illegal addressing mode
+Error: rnd.s (67) Label as already been defined: *
+Error: rnd.s (67) Unknown opcode or directive
