@@ -1,0 +1,345 @@
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+                            ;**************************
+                            ;
+                            ; Random dungeon generator
+                            ;
+                            ;**************************
+                            
+                                    .code
+                            
+                                    .include    "symbols.s"
+                            ;*******************************
+                            ;                              *
+                            ; SYMBOLS                      *
+                            ;                              *
+                            ; AUTHOR:  BILL CHATFIELD      *
+                            ; LICENSE: GPL2                *
+                            ;                              *
+                            ;*******************************
+                            
+        0000004E          = RNDL    .EQU    $4e     ;Continuously incremented while waiting for keyboard input
+        0000004F          = RNDH    .EQU    $4f     ;High byte of RNDL
+        0000009D          = FACEXP  .EQU    $9d     ;Address of FAC exponent used by FADDT,FSUBT,FMULTT,FDIVT
+                            
+                            ;*******************************
+                            ;                              *
+                            ; MEMORY MAPPED INPUT/OUTPUT   *
+                            ; ADDRESSES $C000 - $C0FF      *
+                            ;                              *
+                            ;*******************************
+                            
+        0000C000          = KBD .EQU $C000 ;BIT 7 IS 1 IF KEY PRESSED
+        0000C010          = KBDSTRB .EQU $C010 ;CLEARS KBD BIT 7
+        0000C000          = CLR80STO .EQU $C000 ;ALLOW PAGE2 PG1 & PG2 SWITCHING
+        0000C001          = SET80STO .EQU $C001 ;ALLOW PAGE2 MAIN & AUX SWITCHNG
+        0000C018          = STO80 .EQU $C018 ;1=PAGE2 SWITCHES MAIN/AUX
+                               ;0=PAGE2 SWITCHES VIDEO PAGES
+        0000C00C          = CLR80VID .EQU $C00C ;TURN OFF 80-COL DISPLAY
+        0000C00D          = SET80VID .EQU $C00D ;TURN ON 80-COL DISPLAY
+        0000C01F          = COL80 .EQU $C01F ;0=40 COL IS ON, 1=80 COL IS ON
+        0000C050          = TEXTOFF .EQU $C050 ;SELECTS GRAPHICS MODE
+        0000C051          = TEXTON .EQU $C051 ;SELECTS TEXT MODE
+        0000C01A          = TEXT .EQU $C01A ;1=TEXT MODE ACTIVE,0=GRAPH MODE
+        0000C052          = MIXEDOFF .EQU $C052 ;USE FULL-SCREEN GRAPHICS
+        0000C053          = MIXEDON .EQU $C053 ;USE GRAPHICS WITH 4 LINES TEXT
+        0000C01B          = MIXED .EQU $C01B ;0=FULL SCREEN, 1=MIXED
+        0000C054          = PAGE2OFF .EQU $C054 ;SELECTS PAGE1 OR MAIN VID MEM
+        0000C055          = PAGE2ON .EQU $C055 ;SELECTS PAGE2 OR AUX VID MEM
+        0000C01C          = PAGE2 .EQU $C01C ;1=VID PG2 SELECTED OR AUX SEL
+        0000C056          = HIRESOFF .EQU $C056 ;SELECTS LOW-RES GRAPHICS
+        0000C057          = HIRESON .EQU $C057 ;SELECTS HIGH-RES GRAPHICS
+        0000C01D          = HIRES .EQU $C01D ;0=LOW-RES, 1=HIGH-RES
+                            
+                            ;*******************************
+                            ;                              *
+                            ; SUBROUTINES PROVIDED BY      *
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+                            ; APPLESOFT BASIC              *
+                            ; IN READ-ONLY MEMORY          *
+                            ; ADDRESSES $D000 - $F7FF      *
+                            ;                              *
+                            ;*******************************
+                            
+        0000DB3A          = STROUT .EQU $DB3A ;PRINT STRING IN Y,A
+        0000E2F2          = GIVAYF .EQU $E2F2 ;CONVERT 2-BYTE INT A(HI) Y(LO) TO FLOAT IN FAC
+        0000E6FB          = CONINT .EQU $E6FB ;CONVERT FAC TO BYTE IN X, ERR IF FAC > 255
+        0000E7BE          = FADD .EQU $E7BE ;FAC = MEM + FAC, MEM ADDR IS Y(HI) A(LO)
+        0000E7A7          = FSUB .EQU $E7A7 ;FAC = MEM - FAC, MEM ADDR IS Y(HI) A(LO)
+        0000E97F          = FMULT .EQU $E97F ;FAC = MEM * FAC, MEM ADDR IS Y(HI) A(LO)
+        0000EA66          = FDIV .EQU $EA66 ;FAC = MEM / FAC, MEM ADDR IS Y(HI) A(LO)
+        0000E7C1          = FADDT .EQU $E7C1 ;FAC = ARG + FAC, MUST LOAD FACEXP INTO A FIRST
+        0000E7AA          = FSUBT .EQU $E7AA ;FAC = ARG - FAC, MUST LOAD FACEXP INTO A FIRST
+        0000E982          = FMULTT .EQU $E982 ;FAC = ARG * FAC, MUST LOAD FACEXP INTO A FIRST
+        0000EA69          = FDIVT .EQU $EA69 ;FAC = ARG / FAC, MUST LOAD FACEXP INTO A FIRST
+        0000EA39          = MUL10 .EQU $EA39 ;MULTIPLY FAC BY 10
+        0000EBB2          = FCOMP .EQU $EBB2 ;COMP MEM TO FAC
+        0000EBF2          = QINT .EQU $EBF2 ;CONVERT FAC TO INTEGER
+        0000EB93          = FLOAT .EQU $EB93 ;CONVERT A TO FAC, I THINK
+        0000EB63          = MOVAF .EQU $EB63 ;MOVE FAC INTO ARG
+        0000EB2B          = MOVMF .EQU $EB2B ;MOVE FAC TO MEMORY Y,X
+        0000EB53          = MOVFA .EQU $EB53 ;MOVE ARG TO FAC
+        0000EB2B          = MOVFM .EQU $EB2B ;MOVE MEMORY TO FAC
+        0000EC23          = INT .EQU $EC23 ;APPLESOFT INT FUNCTION
+        0000ED2E          = PRINTFAC .EQU $ED2E ;PRINT FAC. USES FOUT,STROUT
+        0000ED34          = FOUT .EQU $ED34 ;FAC TO STRING, FAC DESTROYED
+        0000EFAE          = RND .EQU $EFAE ;APPLESOFT RND FUNCTION
+                            
+                            ;*******************************
+                            ;                              *
+                            ; SUBROUTINES PROVIDED BY      *
+                            ; SYSTEM MONITOR PROGRAM       *
+                            ; IN READ-ONLY MEMORY          *
+                            ; ADDRESSES $F800 - $FFFF      *
+                            ;                              *
+                            ;*******************************
+                            
+        0000F800          = PLOT .EQU $F800 ;PLOT BLOCK ON LOW-RES SCREEN
+        0000F819          = HLINE .EQU $F819 ;HORIZONTAL LINE
+        0000F828          = VLINE .EQU $F828 ;VERTICAL LINE
+        0000F832          = CLRSCR .EQU $F832 ;CLEAR LOW-RES SCREEN
+        0000F836          = CLRTOP .EQU $F836 ;CLEAR THE TOP OF LOW-RES
+        0000F85F          = NEXTCOL .EQU $F85F ;INCREMENT COLOR BY 3
+        0000F864          = SETCOL .EQU $F864 ;SET LOW-RES GRAPHICS COLOR
+        0000F871          = SCRN .EQU $F871 ;READ THE LOW-RES SCREEN
+        0000FB2F          = TEXTCMD .EQU $FB2F
+        0000FB39          = TEXTMODE .EQU $FB39
+        0000FB40          = GR .EQU $FB40 ;BASIC GR COMMAND
+        0000FCA8          = WAIT .EQU $FCA8
+        0000FDED          = COUT .EQU $FDED ;WRITE A CHARACTER
+        0000FD8E          = CROUT .EQU $FD8E ;WRITE A CARRIAGE RETURN
+        0000FDDA          = PRBYTE .EQU $FDDA ;PRINT VALUE OF BYTE
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+                            
+                                    .include    "macros.s"
+                            ;*******************************
+                            ;                              *
+                            ; MACROS                       *
+                            ;                              *
+                            ; AUTHOR:  BILL CHATFIELD      *
+                            ; LICENSE: GPL2                *
+                            ;                              *
+                            ;*******************************
+                            
+000000'                     PUSHY    .MACRO
+                                     TYA
+                                     PHA
+                                     .ENDM
+                            
+000000'                     POPY     .MACRO
+                                     PLA
+                                     TAY
+                                     .ENDM
+                            
+000000'                     PUSHXY   .MACRO
+                                     TXA
+                                     PHA
+                                     TYA
+                                     PHA
+                                     .ENDM
+                            
+000000'                     POPXY    .MACRO
+                                     PLA
+                                     TAY
+                                     PLA
+                                     TAX
+                                     .ENDM
+                            
+                            ;*******************************
+                            ;                              *
+                            ; PUTS .MACRORO - OUTPUTS STRING  *
+                            ; ]1 = ADDRESS OF NULL-        *
+                            ;      TERMINATED STRING       *
+                            ;                              *
+                            ;*******************************
+                            
+000000'                     PUTS     .MACRO
+                                     PUSHY
+                                     LDY   #0         ; PREPARE LOOP INDEX
+000000'                     NEXT     LDA   \0,Y       ; LOAD A CHARACTER
+                                     CMP   #0         ; CHECK FOR END OF STRING
+                                     BEQ   DONE
+                                     ORA   #%10000000 ; SET HIGH BIT FOR OUTPUT
+                                     JSR   COUT
+                                     INY
+                                     JMP   NEXT
+000000'                     DONE     POPY
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+                                     .ENDM
+                            
+                            ;*******************************
+                            ;                              *
+                            ; PUTF -                       *
+                            ; PRINTS FLOATING POINT NUMBER *
+                            ; IN FAC. DESTROYS VALUE IN    *
+                            ; FAC. DON'T KNOW WHY.         *
+                            ;                              *
+                            ; ]1 - ABS ADDR FOR STRING     *
+                            ;                              *
+                            ;*******************************
+                            
+000000'                     PUTF     .MACRO
+                                     JSR   FOUT       ;CONVERT FAC TO STRING
+                                     STA   \0         ;STORE LOW BYTE OF STRING
+                                     STY   \0+1       ;STORE HIGH BYTE OF STRING
+                                     PUTS  (\0)       ;PRINT STRING
+                                     .ENDM
+                            
+                            
+                                    .org    $8000
+                            
+008000  202380            : main    jsr     seedrnd
+008003  204B80            :         jsr     rndcol  ;Set the color
+008006  60                :         rts
+                            
+                            ; Add A to FAC leaving result in FAC
+008007                    : addafac
+008007  48                :         pha
+008008  2063EB            :         jsr     MOVAF   ;Move FAC to ARG
+00800B  68                :         pla
+00800C  2093EB            :         jsr     FLOAT   ;Convert A to floating point in FAC
+00800F  A59D              :         lda     FACEXP  ;Required for FADDT
+008011  20C1E7            :         jsr     FADDT   ;Add ARG to FAC putting result in FAC
+008014  60                :         rts             ;Return with result in FAC
+                            
+                            ; Multiply FAC by A leaving result in FAC
+008015                    : mulafac
+008015  48                :         pha             ;Save A on stack
+008016  2063EB            :         jsr     MOVAF   ;Move FAC to ARG
+008019  68                :         pla             ;Get original value back in A
+00801A  2093EB            :         jsr     FLOAT   ;Convert value in A to floating point in FAC
+00801D  A59D              :         lda     FACEXP  ;Required for FMULTT
+00801F  2082E9            :         jsr     FMULTT  ;Multiply ARG by FAC putting result in FAC
+008022  60                :         rts             ;Return with result in FAC
+                                    
+                            ; Seed RND function by calling it with a variable negative number.
+008023  A54E              : seedrnd lda     RNDL    ;RNDL is a good seed value, because it changes
+008025  0980              :         ora     #$80    ;Make it negative so RND will interpret it as a seed
+008027  2093EB            :         jsr     FLOAT   ;Convert it to floating point
+00802A  20AEEF            :         jsr     RND     ;Seed the random number generator
+00802D  60                :         rts
+                            
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+                            ; Generate a floating point random number in the range [0,1) with result in FAC
+00802E  A901              : genrnd  lda     #1      ;A 1 arg to RND says to give the next random num
+008030  2093EB            :         jsr     FLOAT   ;Convert to floating point as required by RND
+008033  20AEEF            :         jsr     RND     ;Generate the random number
+008036  60                :         rts             ;Return with result in FAC
+                            
+                            ; Generate an integer random number in the range [0,A-1] with result in A
+008037                    : rnda
+008037  48                :         pha             ;Save parameter in A to stack
+008038  202E80            :         jsr     genrnd  ;Generate random number [0,1) in FAC
+00803B  68                :         pla             ;Load multiplier into accumulator
+00803C  201580            :         jsr     mulafac ;Multiply FAC by A
+00803F  20FBE6            :         jsr     CONINT  ;Convert FAC to 1-byte int in X
+008042  8A                :         txa             ;Put the result in A
+008043  60                :         rts             ;Return with result A
+                            
+                            ; Generate an integer random number in the range [1,A] inclusive 
+                            ; with result in A
+008044                    : rnd1a
+008044  203780            :         jsr     rnda    ;Get an integer between [0,A-1] in A
+008047  18                :         clc             ;Change the range to [1,A]
+008048  6901              :         adc     #1
+00804A  60                :         rts
+                            
+                            ; Set the color to a random non-black value.
+00804B                    : rndcol
+00804B  A90F              :         lda     #15     ;Max color number
+00804D  204480            :         jsr     rnd1a   ;Generate a random non-black color number
+008050  2064F8            :         jsr     SETCOL  ;Set the color
+008053  60                :         rts
+                            
+
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+Symbol Table
+
+CLR80STO                         0000C000
+CLR80VID                         0000C00C
+CLRSCR                           0000F832
+CLRTOP                           0000F836
+COL80                            0000C01F
+CONINT                           0000E6FB
+COUT                             0000FDED
+CROUT                            0000FD8E
+FACEXP                           0000009D
+FADD                             0000E7BE
+FADDT                            0000E7C1
+FCOMP                            0000EBB2
+FDIV                             0000EA66
+FDIVT                            0000EA69
+FLOAT                            0000EB93
+FMULT                            0000E97F
+FMULTT                           0000E982
+FOUT                             0000ED34
+FSUB                             0000E7A7
+FSUBT                            0000E7AA
+GIVAYF                           0000E2F2
+GR                               0000FB40
+HIRES                            0000C01D
+HIRESOFF                         0000C056
+HIRESON                          0000C057
+HLINE                            0000F819
+INT                              0000EC23
+KBD                              0000C000
+KBDSTRB                          0000C010
+MIXED                            0000C01B
+MIXEDOFF                         0000C052
+MIXEDON                          0000C053
+MOVAF                            0000EB63
+MOVFA                            0000EB53
+MOVFM                            0000EB2B
+MOVMF                            0000EB2B
+MUL10                            0000EA39
+NEXTCOL                          0000F85F
+PAGE2                            0000C01C
+PAGE2OFF                         0000C054
+PAGE2ON                          0000C055
+PLOT                             0000F800
+PRBYTE                           0000FDDA
+PRINTFAC                         0000ED2E
+QINT                             0000EBF2
+RND                              0000EFAE
+RNDH                             0000004F
+RNDL                             0000004E
+SCRN                             0000F871
+SET80STO                         0000C001
+SET80VID                         0000C00D
+SETCOL                           0000F864
+
+Portable 65xx Assembler - V1.2 (2008-03-09)
+
+STO80                            0000C018
+STROUT                           0000DB3A
+TEXT                             0000C01A
+TEXTCMD                          0000FB2F
+TEXTMODE                         0000FB39
+TEXTOFF                          0000C050
+TEXTON                           0000C051
+VLINE                            0000F828
+WAIT                             0000FCA8
+__6501__                         00000000
+__6502__                         00000001
+__65816__                        00000000
+__65C02__                        00000000
+__65SC02__                       00000000
+addafac                          00008007
+genrnd                           0000802E
+main                             00008000
+mulafac                          00008015
+rnd1a                            00008044
+rnda                             00008037
+rndcol                           0000804B
+seedrnd                          00008023

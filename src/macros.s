@@ -1,11 +1,11 @@
-********************************
-*                              *
-* MACROS                       *
-*                              *
-* AUTHOR:  BILL CHATFIELD      *
-* LICENSE: GPL2                *
-*                              *
-********************************
+;*******************************
+;                              *
+; MACROS                       *
+;                              *
+; AUTHOR:  BILL CHATFIELD      *
+; LICENSE: GPL2                *
+;                              *
+;*******************************
 
 PUSHY    .MACRO
          TYA
@@ -31,13 +31,13 @@ POPXY    .MACRO
          TAX
          .ENDM
 
-********************************
-*                              *
-* PUTS .MACRORO - OUTPUTS STRING  *
-* ]1 = ADDRESS OF NULL-        *
-*      TERMINATED STRING       *
-*                              *
-********************************
+;*******************************
+;                              *
+; PUTS .MACRORO - OUTPUTS STRING  *
+; ]1 = ADDRESS OF NULL-        *
+;      TERMINATED STRING       *
+;                              *
+;*******************************
 
 PUTS     .MACRO
          PUSHY
@@ -52,16 +52,16 @@ NEXT     LDA   \0,Y       ; LOAD A CHARACTER
 DONE     POPY
          .ENDM
 
-********************************
-*                              *
-* PUTF -                       *
-* PRINTS FLOATING POINT NUMBER *
-* IN FAC. DESTROYS VALUE IN    *
-* FAC. DON'T KNOW WHY.         *
-*                              *
-* ]1 - ABS ADDR FOR STRING     *
-*                              *
-********************************
+;*******************************
+;                              *
+; PUTF -                       *
+; PRINTS FLOATING POINT NUMBER *
+; IN FAC. DESTROYS VALUE IN    *
+; FAC. DON'T KNOW WHY.         *
+;                              *
+; ]1 - ABS ADDR FOR STRING     *
+;                              *
+;*******************************
 
 PUTF     .MACRO
          JSR   FOUT       ;CONVERT FAC TO STRING
@@ -69,3 +69,4 @@ PUTF     .MACRO
          STY   \0+1       ;STORE HIGH BYTE OF STRING
          PUTS  (\0)       ;PRINT STRING
          .ENDM
+

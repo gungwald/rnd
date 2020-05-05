@@ -1,22 +1,22 @@
-********************************
-*                              *
-* SYMBOLS                      *
-*                              *
-* AUTHOR:  BILL CHATFIELD      *
-* LICENSE: GPL2                *
-*                              *
-********************************
+;*******************************
+;                              *
+; SYMBOLS                      *
+;                              *
+; AUTHOR:  BILL CHATFIELD      *
+; LICENSE: GPL2                *
+;                              *
+;*******************************
 
 RNDL	.EQU	$4e	;Continuously incremented while waiting for keyboard input
 RNDH	.EQU	$4f	;High byte of RNDL
 FACEXP	.EQU	$9d	;Address of FAC exponent used by FADDT,FSUBT,FMULTT,FDIVT
 
-********************************
-*                              *
-* MEMORY MAPPED INPUT/OUTPUT   *
-* ADDRESSES $C000 - $C0FF      *
-*                              *
-********************************
+;*******************************
+;                              *
+; MEMORY MAPPED INPUT/OUTPUT   *
+; ADDRESSES $C000 - $C0FF      *
+;                              *
+;*******************************
 
 KBD .EQU $C000 ;BIT 7 IS 1 IF KEY PRESSED
 KBDSTRB .EQU $C010 ;CLEARS KBD BIT 7
@@ -40,14 +40,14 @@ HIRESOFF .EQU $C056 ;SELECTS LOW-RES GRAPHICS
 HIRESON .EQU $C057 ;SELECTS HIGH-RES GRAPHICS
 HIRES .EQU $C01D ;0=LOW-RES, 1=HIGH-RES
 
-********************************
-*                              *
-* SUBROUTINES PROVIDED BY      *
-* APPLESOFT BASIC              *
-* IN READ-ONLY MEMORY          *
-* ADDRESSES $D000 - $F7FF      *
-*                              *
-********************************
+;*******************************
+;                              *
+; SUBROUTINES PROVIDED BY      *
+; APPLESOFT BASIC              *
+; IN READ-ONLY MEMORY          *
+; ADDRESSES $D000 - $F7FF      *
+;                              *
+;*******************************
 
 STROUT .EQU $DB3A ;PRINT STRING IN Y,A
 GIVAYF .EQU $E2F2 ;CONVERT 2-BYTE INT A(HI) Y(LO) TO FLOAT IN FAC
@@ -73,14 +73,14 @@ PRINTFAC .EQU $ED2E ;PRINT FAC. USES FOUT,STROUT
 FOUT .EQU $ED34 ;FAC TO STRING, FAC DESTROYED
 RND .EQU $EFAE ;APPLESOFT RND FUNCTION
 
-********************************
-*                              *
-* SUBROUTINES PROVIDED BY      *
-* SYSTEM MONITOR PROGRAM       *
-* IN READ-ONLY MEMORY          *
-* ADDRESSES $F800 - $FFFF      *
-*                              *
-********************************
+;*******************************
+;                              *
+; SUBROUTINES PROVIDED BY      *
+; SYSTEM MONITOR PROGRAM       *
+; IN READ-ONLY MEMORY          *
+; ADDRESSES $F800 - $FFFF      *
+;                              *
+;*******************************
 
 PLOT .EQU $F800 ;PLOT BLOCK ON LOW-RES SCREEN
 HLINE .EQU $F819 ;HORIZONTAL LINE

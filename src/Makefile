@@ -15,7 +15,7 @@ ifeq ($(OS),Windows_NT)
 	EMU=$(USERPROFILE)\Dropbox\opt\applewin-$(APPLEWIN_VER)\applewin.exe -no-printscreen-dlg -s7 empty -s6d1
 else
 	COPY=cp
-	EMU=$(HOME)/Dropbox/opt/applewin-$(APPLEWIN_VER)/applewin -no-printscreen-dlg -s7 empty -s6d1
+	EMU=wine $(HOME)/Dropbox/opt/applewin-$(APPLEWIN_VER)/applewin -no-printscreen-dlg -s7 empty -s6d1
 endif
 
 # There is some kind of problem with turning this into a boot disk
@@ -25,11 +25,11 @@ endif
 
 $(DSK): $(PGM)
 	$(COPY) $(BASE_DSK) $(DSK)
-	$(AC) -p $(DSK) STARTUP BAS < STARTUP#fc0801
-	$(AC) -p $(DSK) $(PGM) BIN 0x8000 < $(PGM)
+	#$(AC) -p $(DSK) STARTUP BAS < ../storage/STARTUP#fc0801
+	$(AC) -p $(DSK) $(PGM) BIN 0x8000 < $(PGM).bin
 
 $(PGM): $(PGM).obj
-	$(LK65) -output $(PGM) -bin $(PGM).obj
+	$(LK65) -code '$$8000-$$9000' -bin $(PGM).obj
 
 # as65 does not exit with a non-zero code so that make can detect when it failed.
 $(PGM).obj: symbols.s macros.s $(SRC)
