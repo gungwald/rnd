@@ -9,12 +9,15 @@ SRC=$(PGM).s
 VOL=$(PGM)
 DSK=$(PGM).dsk
 APPLEWIN_VER=1.29.10.0
+TO_REMOVE=$(PGM).bin $(PGM).lst $(PGM).map $(DSK) _FileInformation.txt $(PGM).obj *~
 
 ifeq ($(OS),Windows_NT)
 	COPY=copy
+	remove=for %%f in $(1) do if exist %%f del %%f
 	EMU=$(USERPROFILE)\Dropbox\opt\applewin-$(APPLEWIN_VER)\applewin.exe -no-printscreen-dlg -s7 empty -s6d1
 else
 	COPY=cp
+	remove=for f in $(1); do if [ -f $$f ]; then rm $$f; fi; done
 	EMU=wine $(HOME)/Dropbox/opt/applewin-$(APPLEWIN_VER)/applewin -no-printscreen-dlg -s7 empty -s6d1
 endif
 
@@ -39,5 +42,5 @@ test: $(DSK)
 	$(EMU) $(DSK)
 
 clean:
-	rm $(PGM) $(DSK) _FileInformation.txt $(PGM).obj *~
+	$(call remove,$(TO_REMOVE))
 

@@ -20,6 +20,14 @@ drawHallway
 	jsr	generateRandomInt
 	rts
 
+setupGraphics
+	jsr	activateLoResPage1
+	lda	#10
+	ldy	#10
+	jsr	PLOT
+	jsr	activateTextPage1
+	rts
+
 ; Add A to FAC leaving result in FAC
 addAccumToFac
 	pha
