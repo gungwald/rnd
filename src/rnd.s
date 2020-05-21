@@ -9,23 +9,28 @@
 	.include    "symbols.s"
 	.include    "macros.s"
 
-main	jsr	seedRandomNumGenerator
+main
+	jsr	seedRandomNumGenerator
+	jsr	initLoResFullScreen
 	jsr	setRandomColor		;Set the color
 	jsr	drawHallway
 	jsr	drawRoom
+	jsr	waitForKeypress
+	sta	TEXTON
 	rts
 
 drawHallway
 	lda	#16
 	jsr	generateRandomInt
+	sta	x2			;Rightmost X coordinate
+	HLIN	#0,x2,#10
 	rts
 
-setupGraphics
-	jsr	activateLoResPage1
-	lda	#10
-	ldy	#10
-	jsr	PLOT
-	jsr	activateTextPage1
+initLoResFullScreen
+	sta	TEXTOFF			;Enable graphics
+	sta	HIRESOFF		;Enable Lo-res
+	sta	MIXEDOFF		;Full screen
+	jsr	CLRSCR			;Clear the screen
 	rts
 
 ; Add A to FAC leaving result in FAC
@@ -85,6 +90,6 @@ generateRandomPositive
 setRandomColor
 	lda	#15			;Max color number
 	jsr	generateRandomPositive
-	jsr	SETCOL			;Set the color
+	jsr	SETCOLR			;Set the color
 	rts
 

@@ -2,6 +2,9 @@
 *~
 *.swp
 
+# Build process output
+as65-output.txt
+
 # Prerequisites
 *.d
 

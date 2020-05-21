@@ -63,10 +63,19 @@ DONE     POPY
 ;                              *
 ;*******************************
 
-PUTF     .MACRO
-         JSR   FOUT       ;CONVERT FAC TO STRING
-         STA   \0         ;STORE LOW BYTE OF STRING
-         STY   \0+1       ;STORE HIGH BYTE OF STRING
-         PUTS  (\0)       ;PRINT STRING
-         .ENDM
+PUTF	.MACRO
+	JSR	FOUT       ;CONVERT FAC TO STRING
+	STA	\0         ;STORE LOW BYTE OF STRING
+	STY	\0+1       ;STORE HIGH BYTE OF STRING
+	PUTS	(\0)       ;PRINT STRING
+	.ENDM
+
+; Overwrites A and Y
+HLIN	.MACRO	x1,x2,y
+	ldy	x1			;Leftmost X coordinate
+	lda	x2
+	sta	H2			;Rightmost X coordinate
+	lda	y			;Y coordinate
+	jsr	HLINE
+	.ENDM
 
