@@ -4,6 +4,7 @@
 
 # Build process output
 as65-output.txt
+*.lst
 
 # Prerequisites
 *.d

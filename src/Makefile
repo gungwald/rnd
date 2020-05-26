@@ -3,8 +3,8 @@ BASE_DSK=../storage/prodos-2.0.3-boot.dsk
 # It is necessary to use this older version of AppleCommander to support
 # the PowerBook G4 and iBook G3. This version only requires Java 1.3.
 AC=java -jar ../lib/AppleCommander-1.3.5-ac.jar
-AS65=java -cp ../lib/65xx.zip uk.co.demon.obelisk.w65xx.As65
-LK65=java -cp ../lib/65xx.zip uk.co.demon.obelisk.w65xx.Lk65
+AS65=java -cp ../lib/dev65.jar uk.co.demon.obelisk.w65xx.As65
+LK65=java -cp ../lib/dev65.jar uk.co.demon.obelisk.w65xx.Lk65
 SRC=$(PGM).s
 VOL=$(PGM)
 DSK=$(PGM).dsk
@@ -43,4 +43,3 @@ test: $(DSK)
 
 clean:
 	$(call remove,$(TO_REMOVE))
-
