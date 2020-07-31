@@ -4,7 +4,7 @@
 ;
 ;**************************
 
-        .code
+	.code
 
 	.include    "symbols.s"
 	.include    "macros.s"
@@ -19,6 +19,9 @@ main
 	sta	TEXTON
 	rts
 
+waitForKeypress
+	rts
+	
 drawHallway
 	lda	#16
 	jsr	generateRandomInt
@@ -26,6 +29,9 @@ drawHallway
 	HLIN	#0,x2,#10
 	rts
 
+drawRoom
+	rts
+	
 initLoResFullScreen
 	sta	TEXTOFF			;Enable graphics
 	sta	HIRESOFF		;Enable Lo-res
@@ -93,3 +99,4 @@ setRandomColor
 	jsr	SETCOLR			;Set the color
 	rts
 
+x2	.db	0
