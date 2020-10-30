@@ -71,11 +71,11 @@ PUTF	.MACRO
 	.ENDM
 
 ; Overwrites A and Y
-HLIN	.MACRO	x1,x2,y
+HLIN	.MACRO	x1,x2,y1
 	ldy	x1			;Leftmost X coordinate
 	lda	x2
 	sta	H2			;Rightmost X coordinate
-	lda	y			;Y coordinate
+	lda	y1			;Y coordinate
 	jsr	HLINE
 	.ENDM
 

@@ -4,7 +4,7 @@
 ;
 ;**************************
 
-	.code
+        .code
 
 	.include    "symbols.s"
 	.include    "macros.s"
@@ -99,4 +99,7 @@ setRandomColor
 	jsr	SETCOLR			;Set the color
 	rts
 
-x2	.db	0
+        .data
+
+x2	.byte	0
+
